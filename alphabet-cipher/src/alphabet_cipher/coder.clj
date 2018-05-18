@@ -1,7 +1,7 @@
 (ns alphabet-cipher.coder)
 
 (defn gen-alphabet []
-  (vec (map char (range 97 123))))
+  (map char (range 97 123)))
 
 (defn rotate-seq [n coll]
   (take (count coll)
@@ -11,6 +11,10 @@
 (defn div-idxs [idx1 idx2]
   (Math/abs (- (int idx1) (int idx2))))
 
+(defn gen-sypher-table []
+  (let [a []]
+    (for [i (range 26)]
+      (conj a (vec (rotate-seq i (gen-alphabet)))))))
 
 
 (defn encode [keyword message]
