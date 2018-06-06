@@ -1,27 +1,27 @@
 (ns alphabet-cipher.coder)
 
-(defn gen-alphabet []
-  (map char (range 97 123)))
+(def alphabet (seq "abcdefghijklmnopqrstuvwxyz"))
 
-(defn rotate-seq [n coll]
-  (take (count coll)
-        (drop (mod n (count coll))
-              (cycle coll))))
+(defn char2index
+  [c]
+  (- (int c) (int \a)))
 
-(defn div-idxs [idx1 idx2]
-  (Math/abs (- (int idx1) (int idx2))))
-
-(defn gen-sypher-table []
-  (let [a []]
-    (for [i (range 26)]
-      (conj a (vec (rotate-seq i (gen-alphabet)))))))
+(defn coder
+  [keyword message f]
+  (let [key (take (count message) (cycle keyword))
+        msg (seq message)]
+    (apply str (map #(nth alphabet
+                          (mod (f (char2index %1)
+                                  (char2index %2))
+                               (count alphabet)))
+                    msg key))))
 
 
 (defn encode [keyword message]
-  "encodeme")
+  (coder keyword message +))
 
 (defn decode [keyword message]
-  "decodeme")
+  (coder keyword message -))
 
 (defn decipher [cipher message]
-  "decypherme")
+  (coder message cipher -))
